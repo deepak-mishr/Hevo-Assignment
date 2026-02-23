@@ -1,4 +1,5 @@
--- 1. CREATE DATABASE {{ env_var('POSTGRES_DB') }};
+-- 1. Create Database
+CREATE DATABASE {{ env_var('POSTGRES_DB') }};
 
 -- 2. Create the schema for raw data
 CREATE TABLE raw_customers (id INT PRIMARY KEY, first_name VARCHAR(255), last_name VARCHAR(255));
