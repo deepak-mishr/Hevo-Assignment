@@ -2,8 +2,8 @@ version: 2
 
 sources:
   - name: hevo_source
-    database: HEVO_DESTINATION
-    schema: HEVO_SOURCE_PUBLIC
+    database: "{{ env_var('SNOWFLAKE_DATABASE') }}"
+    schema: "{{ env_var('DBT_SOURCE_SCHEMA') }}"
     tables:
       - name: raw_customers
       - name: raw_orders
