@@ -41,7 +41,7 @@ First, clone the repository and set up your credentials.
 git clone https://github.com/deepak-mishr/Hevo-Assignment.git
 
 # Move into the project directory
-cd hevo-dbt-assignment
+cd Hevo-Assignment
 
 ## Update the .env file and assign the value to the defined parameters
 
