@@ -34,6 +34,15 @@ The pipeline utilizes **Change Data Capture (CDC)** via Logical Replication to e
     └── profiles.yml      # Parameterized connection profiles
 
 ```
+###  Clone and Prepare Environment
+First, clone the repository and set up your credentials.
+```bash
+# Clone the repository
+git clone <your-github-repo-link>
+
+# Move into the project directory
+cd hevo-dbt-assignment
+
 ## Update the .env file and assign the value to the defined parameters
 
     ## Infrastructure Setup (Docker & Postgres)
