@@ -38,7 +38,7 @@ The pipeline utilizes **Change Data Capture (CDC)** via Logical Replication to e
 First, clone the repository and set up your credentials.
 ```bash
 # Clone the repository
-git clone <your-github-repo-link>
+git clone https://github.com/deepak-mishr/Hevo-Assignment.git
 
 # Move into the project directory
 cd hevo-dbt-assignment
