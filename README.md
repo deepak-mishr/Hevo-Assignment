@@ -67,13 +67,41 @@ cd Hevo-Assignment
     # 2. Load environment variables
     export $(grep -v '^#' .env | xargs)
 
-    # 3. Initialize DB and Load Data
-    docker exec -it $PG_CONTAINER psql -U postgres -c "CREATE DATABASE $PG_DB;"
-    docker cp ./data/ $PG_CONTAINER:/tmp/
-    docker cp setup_postgres.sql $PG_CONTAINER:/tmp/
-    docker exec -it $PG_CONTAINER psql -U postgres -d $PG_DB \
-      -v pub_name=$PG_PUB -v slot_name=$PG_SLOT -f /tmp/setup_postgres.sql
+    # 3. Connect to Postgres
+    docker exec -it $PG_CONTAINER
 
+    #Enable Logical Replication:
+
+    SHOW wal_level;
+    ALTER SYSTEM SET wal_level = 'logical';
+
+
+    #Create DB and Load Data
+
+    CREATE DATABASE name_of_database;
+    \c name_of_database;
+
+    #Create table using the source_postgres.sql file and load the data available within Data Folder
+
+    #Copy the Data from local to Docker /tmp folder
+    cd Data
+    sudo docker cp raw_customers.csv $PG_CONTAINER:/tmp/
+    sudo docker cp raw_orders.csv $PG_CONTAINER:/tmp/
+    sudo docker cp raw_payments.csv $PG_CONTAINER:/tmp/
+
+    #Load Data to Postgres from Docker:
+
+    COPY raw_customers(id, first_name, last_name) 
+    FROM '/tmp/raw_customers.csv' DELIMITER ',' CSV HEADER;
+
+    COPY raw_orders(id, user_id, order_date, status) 
+    FROM '/tmp/raw_orders.csv' DELIMITER ',' CSV HEADER;
+
+    COPY raw_payments(id, order_id, payment_method, amount) 
+    FROM '/tmp/raw_payments.csv' DELIMITER ',' CSV HEADER;
+
+
+    
 ## Ngrok Networking Setup
 
     # 1. Authenticate (Only once)
