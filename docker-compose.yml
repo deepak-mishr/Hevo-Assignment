@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    container_name: ${POSTGRES_CONTAINER}
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    command: ["postgres", "-c", "wal_level=logical"]
