@@ -50,7 +50,7 @@ cd Hevo-Assignment
     Spin up the database and load the data using parameterized scripts:
 
     # 1. Start the container
-    docker -compose up -d
+    docker-compose up -d
 
     # 2. Load environment variables
     export $(grep -v '^#' .env | xargs)
