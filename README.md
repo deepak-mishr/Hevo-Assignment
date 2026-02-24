@@ -32,7 +32,19 @@ The pipeline utilizes **Change Data Capture (CDC)** via Logical Replication to e
 └── dbt_project/          # dbt Transformation layer
     ├── models/           # SQL Models and Schema Tests
     └── profiles.yml      # Parameterized connection profiles
+```
+### Install the Docker an dSetup the Postgres Conatiner
 
+# Pull and start the container
+sudo docker run --name Hevo-Postgres -p 5432:5432 -e POSTGRES_PASSWORD='your_password' -d postgres
+
+# Enable Logical Replication 
+sudo docker exec -it Hevo-Postgres psql -U postgres -c "ALTER SYSTEM SET wal_level = 'logical';"
+
+# Restart to apply changes
+sudo docker restart Hevo-Postgres
+
+```
 ```
 ###  Clone and Prepare Environment
 First, clone the repository and set up your credentials.
