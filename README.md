@@ -36,20 +36,42 @@ The pipeline utilizes **Change Data Capture (CDC)** via Logical Replication to e
 ```
 ## Update the .env file and assign the value to the defined parameters
 
-## Infrastructure Setup (Docker & Postgres)
+    ## Infrastructure Setup (Docker & Postgres)
 
-Spin up the database and load the data using parameterized scripts:
+    Spin up the database and load the data using parameterized scripts:
 
-# 1. Start the container
-docker-compose up -d
+    # 1. Start the container
+    docker-compose up -d
 
-# 2. Load environment variables
-export $(grep -v '^#' .env | xargs)
+    # 2. Load environment variables
+    export $(grep -v '^#' .env | xargs)
 
-# 3. Initialize DB and Load Data
-docker exec -it $PG_CONTAINER psql -U postgres -c "CREATE DATABASE $PG_DB;"
-docker cp ./data/ $PG_CONTAINER:/tmp/
-docker cp setup_postgres.sql $PG_CONTAINER:/tmp/
-docker exec -it $PG_CONTAINER psql -U postgres -d $PG_DB \
-  -v pub_name=$PG_PUB -v slot_name=$PG_SLOT -f /tmp/setup_postgres.sql
+    # 3. Initialize DB and Load Data
+    docker exec -it $PG_CONTAINER psql -U postgres -c "CREATE DATABASE $PG_DB;"
+    docker cp ./data/ $PG_CONTAINER:/tmp/
+    docker cp setup_postgres.sql $PG_CONTAINER:/tmp/
+    docker exec -it $PG_CONTAINER psql -U postgres -d $PG_DB \
+      -v pub_name=$PG_PUB -v slot_name=$PG_SLOT -f /tmp/setup_postgres.sql
+
+## Ngrok Networking Setup
+
+    # 1. Authenticate (Only once)
+    ngrok config add-authtoken $NGROK_AUTHTOKEN
+
+    # 2. Start the TCP Tunnel
+    ngrok tcp 5432
+
+    Note the forwarding address (e.g., 0.tcp.in.ngrok.io:15653). Use 0.tcp.in.ngrok.io as the Host and 15653 as the Port in the Hevo UI.
+
+    # 3. Map the Host and Port in Hevo's Source Config.
+
+## Snowflake and DBT Setup
+    Ensure Snowflake destination is ready.
+
+    Run dbt:
+    
+    cd dbt_project
+    dbt build
+
+  
 
