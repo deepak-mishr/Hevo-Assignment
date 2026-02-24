@@ -1,0 +1,15 @@
+# ~/.dbt/profiles.yml
+
+hevo_assignment:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOW_ACCOUNT') }}"
+      user: "{{ env_var('SNOW_USER') }}"
+      password: "{{ env_var('SNOW_PASS') }}"
+      role: "{{ env_var('SNOW_ROLE') }}"
+      database: "{{ env_var('SNOW_DB') }}"
+      warehouse: "{{ env_var('SNOW_WH') }}"
+      schema: PUBLIC
+      threads: 4
