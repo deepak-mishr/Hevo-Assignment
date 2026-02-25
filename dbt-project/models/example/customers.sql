@@ -1,6 +1,6 @@
 {{ config(
     materialized='table',
-    database=env_var('SNOWFLAKE_DATABASE')
+    database=env_var('SNOW_DB')
 ) }}
 
 with customers as (
@@ -46,3 +46,4 @@ select
 from customers c
 left join customer_orders co on c.id = co.customer_id
 left join customer_payments cp on c.id = cp.customer_id
+
