@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: hevo_source
     database: "{{ env_var('SNOW_DB') }}"
-    schema: "your_schema_name"
+    schema: "{{ env_var('SNOW_SCHEMA') }}"
     tables:
       - name: raw_customers
       - name: raw_orders
