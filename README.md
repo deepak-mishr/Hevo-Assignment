@@ -61,6 +61,13 @@ docker-compose up -d
 # 2. Load environment variables
 export $(grep -v '^#' .env | xargs)
 
+#Copy the Data from local to Docker /tmp folder
+cd Data
+sudo docker cp raw_customers.csv $PG_CONTAINER:/tmp/
+sudo docker cp raw_orders.csv $PG_CONTAINER:/tmp/
+sudo docker cp raw_payments.csv $PG_CONTAINER:/tmp/
+
+
 # 3. Connect to Postgres
 docker exec -it $PG_CONTAINER psql -U postgres
 
@@ -72,16 +79,11 @@ ALTER SYSTEM SET wal_level = 'logical'; ( Change only if not Logical already)
 
 #Create DB and Load Data
 
-CREATE DATABASE name_of_database;
-\c name_of_database;
+CREATE DATABASE Hevo_Postgres;
+\c Hevo_Postgres;
 
 #Create table using the source_postgres.sql file and load the data available within Data Folder
 
-#Copy the Data from local to Docker /tmp folder
-cd Data
-sudo docker cp raw_customers.csv $PG_CONTAINER:/tmp/
-sudo docker cp raw_orders.csv $PG_CONTAINER:/tmp/
-sudo docker cp raw_payments.csv $PG_CONTAINER:/tmp/
 
 #Load Data to Postgres from Docker:
 
