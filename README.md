@@ -31,18 +31,8 @@ The pipeline utilizes **Change Data Capture (CDC)** via Logical Replication to e
 │   └── raw_payments.csv
 └── dbt_project/          # dbt Transformation layer
     ├── models/           # SQL Models and Schema Tests
-    └── profiles.yml      # Parameterized connection profiles
-```
-### Install the Docker an dSetup the Postgres Conatiner
+    └── profiles.yml      # Parameterized connection profile
 
-# Pull and start the container
-sudo docker run --name Hevo-Postgres -p 5432:5432 -e POSTGRES_PASSWORD='your_password' -d postgres
-
-# Enable Logical Replication 
-sudo docker exec -it Hevo-Postgres psql -U postgres -c "ALTER SYSTEM SET wal_level = 'logical';"
-
-# Restart to apply changes
-sudo docker restart Hevo-Postgres
 
 ```
 ```
@@ -57,48 +47,52 @@ cd Hevo-Assignment
 
 ## Update the .env file and assign the value to the defined parameters
 
-    ## Infrastructure Setup (Docker & Postgres)
+## Infrastructure Setup (Docker & Postgres)
 
-    Spin up the database and load the data using parameterized scripts:
-
-    # 1. Start the container
-    docker-compose up -d
-
-    # 2. Load environment variables
-    export $(grep -v '^#' .env | xargs)
-
-    # 3. Connect to Postgres
-    docker exec -it $PG_CONTAINER
-
-    #Enable Logical Replication:
-
-    SHOW wal_level;
-    ALTER SYSTEM SET wal_level = 'logical';
+# Create the docker group, add your current user to the group and apply the changes to your current session
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
 
 
-    #Create DB and Load Data
+# 1. Start the container
+docker-compose up -d
 
-    CREATE DATABASE name_of_database;
-    \c name_of_database;
+# 2. Load environment variables
+export $(grep -v '^#' .env | xargs)
 
-    #Create table using the source_postgres.sql file and load the data available within Data Folder
+# 3. Connect to Postgres
+docker exec -it $PG_CONTAINER
 
-    #Copy the Data from local to Docker /tmp folder
-    cd Data
-    sudo docker cp raw_customers.csv $PG_CONTAINER:/tmp/
-    sudo docker cp raw_orders.csv $PG_CONTAINER:/tmp/
-    sudo docker cp raw_payments.csv $PG_CONTAINER:/tmp/
+#Enable Logical Replication:
 
-    #Load Data to Postgres from Docker:
+SHOW wal_level;
+ALTER SYSTEM SET wal_level = 'logical';
 
-    COPY raw_customers(id, first_name, last_name) 
-    FROM '/tmp/raw_customers.csv' DELIMITER ',' CSV HEADER;
 
-    COPY raw_orders(id, user_id, order_date, status) 
-    FROM '/tmp/raw_orders.csv' DELIMITER ',' CSV HEADER;
+#Create DB and Load Data
 
-    COPY raw_payments(id, order_id, payment_method, amount) 
-    FROM '/tmp/raw_payments.csv' DELIMITER ',' CSV HEADER;
+CREATE DATABASE name_of_database;
+\c name_of_database;
+
+#Create table using the source_postgres.sql file and load the data available within Data Folder
+
+#Copy the Data from local to Docker /tmp folder
+cd Data
+sudo docker cp raw_customers.csv $PG_CONTAINER:/tmp/
+sudo docker cp raw_orders.csv $PG_CONTAINER:/tmp/
+sudo docker cp raw_payments.csv $PG_CONTAINER:/tmp/
+
+#Load Data to Postgres from Docker:
+
+COPY raw_customers(id, first_name, last_name) 
+FROM '/tmp/raw_customers.csv' DELIMITER ',' CSV HEADER;
+
+COPY raw_orders(id, user_id, order_date, status) 
+FROM '/tmp/raw_orders.csv' DELIMITER ',' CSV HEADER;
+
+COPY raw_payments(id, order_id, payment_method, amount) 
+FROM '/tmp/raw_payments.csv' DELIMITER ',' CSV HEADER;
 
 
     
