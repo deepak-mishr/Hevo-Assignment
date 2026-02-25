@@ -62,12 +62,12 @@ docker-compose up -d
 export $(grep -v '^#' .env | xargs)
 
 # 3. Connect to Postgres
-docker exec -it $PG_CONTAINER
+docker exec -it $PG_CONTAINER psql -U postgres
 
 #Enable Logical Replication:
 
 SHOW wal_level;
-ALTER SYSTEM SET wal_level = 'logical';
+ALTER SYSTEM SET wal_level = 'logical'; ( Change only if not Logical already)
 
 
 #Create DB and Load Data
