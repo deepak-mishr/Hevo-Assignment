@@ -4,6 +4,12 @@ CREATE TABLE raw_orders (id INT PRIMARY KEY, user_id INT, order_date DATE, statu
 CREATE TABLE raw_payments (id INT PRIMARY KEY, order_id INT, payment_method VARCHAR(100), amount INT);
 
 
--- Setup Replication
-CREATE PUBLICATION name_of_publication FOR ALL TABLES;
-SELECT pg_create_logical_replication_slot('Your_slot_name', 'pgoutput');
+-- 1. Drop the slot if it exists elsewhere to avoid "already exists" errors
+SELECT pg_drop_replication_slot('hevo_slot') WHERE EXISTS (SELECT 1 FROM pg_replication_slots WHERE slot_name = 'hevo_slot');
+
+-- 2. Create the Logical Replication Slot for this specific database
+SELECT * FROM pg_create_logical_replication_slot('hevo_slot', 'pgoutput');
+
+-- 3. Create the Publication for your tables
+CREATE PUBLICATION hevo_publication FOR ALL TABLES;
+
