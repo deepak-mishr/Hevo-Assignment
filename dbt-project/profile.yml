@@ -11,5 +11,5 @@ hevo_assignment:
       role: "{{ env_var('SNOW_ROLE') }}"
       database: "{{ env_var('SNOW_DB') }}"
       warehouse: "{{ env_var('SNOW_WH') }}"
-      schema: PUBLIC
+      schema: "{{ env_var('SNOW_SCHEMA') }}"
       threads: 4
