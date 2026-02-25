@@ -79,8 +79,8 @@ ALTER SYSTEM SET wal_level = 'logical'; ( Change only if not Logical already)
 
 #Create DB and Load Data
 
-CREATE DATABASE Hevo_Postgres;
-\c Hevo_Postgres;
+CREATE DATABASE hevo_postgres;
+\c hevo_postgres;
 
 #Create table using the source_postgres.sql file and load the data available within Data Folder
 
@@ -95,6 +95,19 @@ FROM '/tmp/raw_orders.csv' DELIMITER ',' CSV HEADER;
 
 COPY raw_payments(id, order_id, payment_method, amount) 
 FROM '/tmp/raw_payments.csv' DELIMITER ',' CSV HEADER;
+
+#Connect to Postgres Database:
+
+docker exec -it Hevo-Postgres psql -U postgres -d hevo_postres
+
+-- 1. Drop the slot if it exists elsewhere to avoid "already exists" errors
+SELECT pg_drop_replication_slot('hevo_slot') WHERE EXISTS (SELECT 1 FROM pg_replication_slots WHERE slot_name = 'hevo_slot');
+
+-- 2. Create the Logical Replication Slot for this specific database
+SELECT * FROM pg_create_logical_replication_slot('hevo_slot', 'pgoutput');
+
+-- 3. Create the Publication for your tables
+CREATE PUBLICATION hevo_publication FOR ALL TABLES;
 
 
     
