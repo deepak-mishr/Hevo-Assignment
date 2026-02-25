@@ -112,6 +112,26 @@ FROM '/tmp/raw_payments.csv' DELIMITER ',' CSV HEADER;
     Ensure Snowflake destination is ready.
 
     Run dbt:
+
+    mkdir -p ~/.dbt
+    nano ~/.dbt/profiles.yml
+
+    #Paste the below content in ~/.dbt/profiles.yml
+
+    hevo_interview:
+      outputs:
+        dev:
+          type: snowflake
+          account: "{{ env_var('SNOW_ACCOUNT') }}"
+          user: "{{ env_var('SNOW_USER') }}"
+          password: "{{ env_var('SNOW_PASS') }}"
+          role: ACCOUNTADMIN
+          warehouse: "{{ env_var('SNOW_WH') }}"
+          database: "{{ env_var('SNOW_DB') }}"
+          schema: your_schema_name
+          threads: 1
+          client_session_keep_alive: False
+      target: dev
     
     cd dbt_project
     dbt build
