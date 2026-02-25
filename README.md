@@ -128,7 +128,7 @@ FROM '/tmp/raw_payments.csv' DELIMITER ',' CSV HEADER;
           role: ACCOUNTADMIN
           warehouse: "{{ env_var('SNOW_WH') }}"
           database: "{{ env_var('SNOW_DB') }}"
-          schema: your_schema_name
+          schema: "{{ env_var('SNOW_SCHEMA') }}"
           threads: 1
           client_session_keep_alive: False
       target: dev
