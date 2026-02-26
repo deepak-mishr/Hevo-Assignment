@@ -1,10 +1,16 @@
 version: 2
 
 sources:
-  - name: "{{ env_var('HEVO_PREFIX') }}"
+  - name: hevo_raw
     database: "{{ env_var('SNOW_DB') }}"
     schema: "{{ env_var('SNOW_SCHEMA') }}"
     tables:
       - name: raw_customers
+        # This dynamically joins the prefix with the table name
+        identifier: "{{ env_var('HEVO_DESTINATION_PREFIX') }}raw_customers"
+        
       - name: raw_orders
+        identifier: "{{ env_var('HEVO_DESTINATION_PREFIX') }}raw_orders"
+        
       - name: raw_payments
+        identifier: "{{ env_var('HEVO_DESTINATION_PREFIX') }}raw_payments"
