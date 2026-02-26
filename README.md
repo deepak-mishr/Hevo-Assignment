@@ -96,13 +96,8 @@ ALTER SYSTEM SET wal_level = 'logical'; ( Change only if not Logical already)
 
     Note the forwarding address (e.g., 0.tcp.in.ngrok.io:15653). Use 0.tcp.in.ngrok.io as the Host and 15653 as the Port in the Hevo UI.
 
-    # 3. Map the Host and Port in Hevo's Source Config.
 
-## Snowflake and DBT Setup
-    Ensure Snowflake destination is ready.
-
-    Run dbt:
-
+## DBT setup and SQL Transformation
     mkdir -p ~/.dbt
     nano ~/.dbt/profiles.yml
 
