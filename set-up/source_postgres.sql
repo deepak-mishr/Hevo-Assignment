@@ -21,6 +21,6 @@ DROP PUBLICATION IF EXISTS :pub_name;
 CREATE PUBLICATION :pub_name FOR ALL TABLES;
 
 -- 3. Create the Logical Replication Slot
-SELECT pg_create_logical_replication_slot(:'slot_name','pgoutput');
+SELECT pg_create_logical_replication_slot(:slot_name,'pgoutput');
 
 
