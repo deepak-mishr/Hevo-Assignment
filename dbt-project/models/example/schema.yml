@@ -6,8 +6,14 @@ sources:
     schema: "{{ env_var('SNOW_SCHEMA') }}"
     tables:
       - name: raw_customers
+        tests:
+          -not_null
         
       - name: raw_orders
+        tests:
+          -not_null
         
       - name: raw_payments
+        tests:
+          -not_null
 
