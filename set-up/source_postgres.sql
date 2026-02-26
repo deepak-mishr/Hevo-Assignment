@@ -1,9 +1,29 @@
 -- source_postgres.sql
 
 -- 1. Create Tables
-CREATE TABLE IF NOT EXISTS raw_customers (id INT PRIMARY KEY, first_name VARCHAR(255), last_n>
-CREATE TABLE IF NOT EXISTS raw_orders (id INT PRIMARY KEY, user_id INT, order_date DATE, stat>
-CREATE TABLE IF NOT EXISTS raw_payments (id INT PRIMARY KEY, order_id INT, payment_method VAR>
+-- 1. Raw Customers Table
+CREATE TABLE raw_customers (
+    id INT PRIMARY KEY,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255)
+);
+
+-- 2. Raw Orders Table
+CREATE TABLE raw_orders (
+    id INT PRIMARY KEY,
+    user_id INT,
+    order_date DATE,
+    status VARCHAR(50)
+);
+
+-- 3. Raw Payments Table
+CREATE TABLE raw_payments (
+    id INT PRIMARY KEY,
+    order_id INT,
+    payment_method VARCHAR(100),
+    amount INT
+);
+
 
 COPY raw_customers(id, first_name, last_name) 
 FROM '/tmp/raw_customers.csv' DELIMITER ',' CSV HEADER;
