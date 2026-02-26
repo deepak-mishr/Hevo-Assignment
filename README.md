@@ -67,48 +67,23 @@ sudo docker cp raw_customers.csv $PG_CONTAINER:/tmp/
 sudo docker cp raw_orders.csv $PG_CONTAINER:/tmp/
 sudo docker cp raw_payments.csv $PG_CONTAINER:/tmp/
 
+#Copy the source_postgres.sql file from local to Container
+cd ..
+cd set-up
+docker cp source_postgres.sql ${PG_CONTAINER}:/tmp/source_postgres.sql
 
-# 3. Connect to Postgres
-docker exec -it $PG_CONTAINER psql -U postgres
+#Execute the SQL file using -v to pass variables
+docker exec -it ${PG_CONTAINER} psql \
+  -U ${PG_USER} \
+  -d ${PG_DB} \
+  -v pub_name=${PG_PUB} \
+  -v slot_name=${PG_SLOT} \
+  -f /tmp/source_postgres.sql
 
 #Enable Logical Replication:
 
 SHOW wal_level;
 ALTER SYSTEM SET wal_level = 'logical'; ( Change only if not Logical already)
-
-
-#Create DB and Load Data
-
-CREATE DATABASE hevo_postgres;
-\c hevo_postgres;
-
-#Create table using the source_postgres.sql file and load the data available within Data Folder
-
-
-#Load Data to Postgres from Docker:
-
-COPY raw_customers(id, first_name, last_name) 
-FROM '/tmp/raw_customers.csv' DELIMITER ',' CSV HEADER;
-
-COPY raw_orders(id, user_id, order_date, status) 
-FROM '/tmp/raw_orders.csv' DELIMITER ',' CSV HEADER;
-
-COPY raw_payments(id, order_id, payment_method, amount) 
-FROM '/tmp/raw_payments.csv' DELIMITER ',' CSV HEADER;
-
-#Connect to Postgres Database:
-
-docker exec -it Hevo-Postgres psql -U postgres -d hevo_postres
-
--- 1. Drop the slot if it exists elsewhere to avoid "already exists" errors
-SELECT pg_drop_replication_slot('hevo_slot') WHERE EXISTS (SELECT 1 FROM pg_replication_slots WHERE slot_name = 'hevo_slot');
-
--- 2. Create the Logical Replication Slot for this specific database
-SELECT * FROM pg_create_logical_replication_slot('hevo_slot', 'pgoutput');
-
--- 3. Create the Publication for your tables
-CREATE PUBLICATION hevo_publication FOR ALL TABLES;
-
 
     
 ## Ngrok Networking Setup
