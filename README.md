@@ -125,6 +125,7 @@ ALTER SYSTEM SET wal_level = 'logical'; ( Change only if not Logical already)
       target: dev
     
    
+## Install DBT
 
     # 1. Update your package list and install Python tools
     sudo apt update
