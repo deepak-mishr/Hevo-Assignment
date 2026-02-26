@@ -72,6 +72,12 @@ cd ..
 cd set-up
 docker cp source_postgres.sql ${PG_CONTAINER}:/tmp/source_postgres.sql
 
+#Connect to Postgres and Create Database
+docker exec -it Hevo-Postgres psql -U postgres
+
+Create database your_dm_name;
+\q
+
 #Execute the SQL file using -v to pass variables
 docker exec -it ${PG_CONTAINER} psql \
   -U ${PG_USER} \
