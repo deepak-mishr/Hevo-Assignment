@@ -124,6 +124,26 @@ ALTER SYSTEM SET wal_level = 'logical'; ( Change only if not Logical already)
           client_session_keep_alive: False
       target: dev
     
+   
+
+    # 1. Update your package list and install Python tools
+    sudo apt update
+    sudo apt install python3-pip python3-venv -y
+    
+    # 2. Create a virtual environment for your dbt project
+    python3 -m venv dbt-env
+    
+    # 3. Activate the environment (You'll need to run this every time you start working)
+    source dbt-env/bin/activate
+    
+    # 4. Install the dbt adapter for Snowflake (required for your destination)
+    pip install dbt-snowflake
+    
+    # 5. Verify the installation
+    dbt --version
+
+
+
     cd dbt_project
     dbt build
 
