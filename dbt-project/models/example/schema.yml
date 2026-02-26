@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: "{{env_var('HEVO_PREFIX'}}"
+  - name: "{{ env_var('HEVO_PREFIX') }}"
     database: "{{ env_var('SNOW_DB') }}"
     schema: "{{ env_var('SNOW_SCHEMA') }}"
     tables:
