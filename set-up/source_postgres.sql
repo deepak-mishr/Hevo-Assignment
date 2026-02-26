@@ -5,6 +5,16 @@ CREATE TABLE IF NOT EXISTS raw_customers (id INT PRIMARY KEY, first_name VARCHAR
 CREATE TABLE IF NOT EXISTS raw_orders (id INT PRIMARY KEY, user_id INT, order_date DATE, status VARCHAR(50));
 CREATE TABLE IF NOT EXISTS raw_payments (id INT PRIMARY KEY, order_id INT, payment_method VARCHAR(100), amount INT);
 
+COPY raw_customers(id, first_name, last_name) 
+FROM '/tmp/raw_customers.csv' DELIMITER ',' CSV HEADER;
+
+COPY raw_orders(id, user_id, order_date, status) 
+FROM '/tmp/raw_orders.csv' DELIMITER ',' CSV HEADER;
+
+COPY raw_payments(id, order_id, payment_method, amount) 
+FROM '/tmp/raw_payments.csv' DELIMITER ',' CSV HEADER;
+
+
 -- 2. Create the Publication using a variable
 -- We wrap in a DO block or use standard syntax with :variable
 DROP PUBLICATION IF EXISTS :pub_name;
